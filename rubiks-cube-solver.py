@@ -29,6 +29,28 @@ rubiks_cube_pattern = \
          ['b', 'g', 'g']]
 ]
 
+rubiks_cube_default_pattern = \
+[
+        [['r', 'r', 'r'],
+         ['r', 'r', 'r'],
+         ['r', 'r', 'r']],
+        [['y', 'y', 'y'],
+         ['y', 'y', 'y'],
+         ['y', 'y', 'y']],
+        [['o', 'o', 'o'],
+         ['o', 'o', 'o'],
+         ['o', 'o', 'o']],
+        [['w', 'w', 'w'],
+         ['w', 'w', 'w'],
+         ['w', 'w', 'w']],
+        [['b', 'b', 'b'],
+         ['b', 'b', 'b'],
+         ['b', 'b', 'b']],
+        [['g', 'g', 'g'],
+         ['g', 'g', 'g'],
+         ['g', 'g', 'g']]
+]
+
 class rubiks_cube:
     __front = 0
     __down = 1
@@ -38,7 +60,7 @@ class rubiks_cube:
     __left = 5
 
     # Constructor
-    def __init__(self, rubiks_cube_pattern):
+    def __init__(self, rubiks_cube_pattern = rubiks_cube_default_pattern):
         self.__rubiks_cube_pattern = rubiks_cube_pattern
     
     # Verify whether the initial pattern of the Rubik's Cube is valid by
@@ -74,7 +96,7 @@ class rubiks_cube:
             print "error"
             sys.exit(-1)
         else:
-            print "no error"
+            print "no error" 
         
 rubiks_cube_instance = rubiks_cube(rubiks_cube_pattern)
 
