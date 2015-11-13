@@ -76,20 +76,20 @@ class rubiks_cube:
         __o_cnt = 0
         __w_cnt = 0
 
-        for face in self.__rubiks_cube_pattern:
-            for row in face:
-                for column in row:
-                    if column == 'r':
+        for __face in self.__rubiks_cube_pattern:
+            for __row in __face:
+                for __column in __row:
+                    if __column == 'r':
                         __r_cnt += 1
-                    elif column == 'g':
+                    elif __column == 'g':
                         __g_cnt += 1
-                    elif column == 'b':
+                    elif __column == 'b':
                         __b_cnt += 1
-                    elif column == 'y':
+                    elif __column == 'y':
                         __y_cnt += 1
-                    elif column == 'o':
+                    elif __column == 'o':
                         __o_cnt += 1
-                    elif column == 'w':
+                    elif __column == 'w':
                         __w_cnt += 1
         if not (__r_cnt == __g_cnt == __b_cnt == __y_cnt == __w_cnt ==
                 __w_cnt == 9):
@@ -97,7 +97,14 @@ class rubiks_cube:
             sys.exit(-1)
         else:
             print "no error" 
-        
+
+    # Display the current pattern of the Rubik's Cube
+    def display(self):
+        for __face in self.__rubiks_cube_pattern:
+            print __face
+
 rubiks_cube_instance = rubiks_cube(rubiks_cube_pattern)
 
 rubiks_cube_instance.verify_init_state()
+
+rubiks_cube_instance.display()
