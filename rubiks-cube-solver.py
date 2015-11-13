@@ -143,6 +143,37 @@ class rubiks_cube:
                 self.__rubiks_cube_pattern[self.__left][0]
         self.__rubiks_cube_pattern[self.__left][0] = \
                 __temp_row
+    # Twist "up" face counter-clockwise
+    def twist_up_ccw(self):
+        __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
+        self.__rubiks_cube_pattern[self.__up][0][2] = \
+                __temp_face[2][2]
+        self.__rubiks_cube_pattern[self.__up][0][1] = \
+                __temp_face[1][2]
+        self.__rubiks_cube_pattern[self.__up][0][0] = \
+                __temp_face[0][2]
+        self.__rubiks_cube_pattern[self.__up][1][2] = \
+                __temp_face[2][1]
+        self.__rubiks_cube_pattern[self.__up][1][1] = \
+                __temp_face[1][1]
+        self.__rubiks_cube_pattern[self.__up][1][0] = \
+                __temp_face[0][1]
+        self.__rubiks_cube_pattern[self.__up][2][2] = \
+                __temp_face[2][0]
+        self.__rubiks_cube_pattern[self.__up][2][1] = \
+                __temp_face[1][0]
+        self.__rubiks_cube_pattern[self.__up][2][0] = \
+                __temp_face[0][0]
+
+        __temp_row = copy.deepcopy(self.__rubiks_cube_pattern[self.__front][0])
+        self.__rubiks_cube_pattern[self.__front][0] = \
+                self.__rubiks_cube_pattern[self.__left][0]
+        self.__rubiks_cube_pattern[self.__left][0] = \
+                self.__rubiks_cube_pattern[self.__back][0]
+        self.__rubiks_cube_pattern[self.__back][0] = \
+                self.__rubiks_cube_pattern[self.__right][0]
+        self.__rubiks_cube_pattern[self.__right][0] = \
+                __temp_row
 
 rubiks_cube_instance = rubiks_cube()
 #rubiks_cube_instance = rubiks_cube(rubiks_cube_pattern)
@@ -151,8 +182,8 @@ rubiks_cube_instance.verify_init_state()
 
 rubiks_cube_instance.display()
 
-rubiks_cube_instance.twist_up_cw()
-
 print "\n"
+
+rubiks_cube_instance.twist_up_ccw()
 
 rubiks_cube_instance.display()
