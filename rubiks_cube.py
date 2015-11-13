@@ -8,28 +8,6 @@
 import sys
 import copy
 
-rubiks_cube_pattern = \
-[
-        [['r', 'y', 'b'],
-         ['w', 'b', 'o'],
-         ['r', 'o', 'o']],
-        [['y', 'b', 'g'],
-         ['w', 'o', 'r'],
-         ['y', 'g', 'g']],
-        [['r', 'r', 'r'],
-         ['y', 'g', 'b'],
-         ['o', 'b', 'y']],
-        [['y', 'r', 'g'],
-         ['b', 'r', 'g'],
-         ['b', 'g', 'w']],
-        [['o', 'o', 'o'],
-         ['y', 'w', 'y'],
-         ['w', 'w', 'w']],
-        [['b', 'w', 'w'],
-         ['r', 'y', 'o'],
-         ['b', 'g', 'g']]
-]
-
 rubiks_cube_default_pattern = \
 [
         [['r', 'r', 'r'],
@@ -173,16 +151,3 @@ class rubiks_cube:
                 self.__rubiks_cube_pattern[self.__right][0]
         self.__rubiks_cube_pattern[self.__right][0] = \
                 __temp_row
-
-rubiks_cube_instance = rubiks_cube()
-#rubiks_cube_instance = rubiks_cube(rubiks_cube_pattern)
-
-rubiks_cube_instance.verify_init_state()
-
-rubiks_cube_instance.display()
-
-print "\n"
-
-rubiks_cube_instance.twist_up_ccw()
-
-rubiks_cube_instance.display()
