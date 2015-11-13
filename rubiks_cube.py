@@ -111,7 +111,6 @@ class rubiks_cube:
             print __row
 
     # Rubik's Cube move operations
-
     # Twist "up" face clockwise
     def twist_up_cw(self):
         __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
