@@ -103,7 +103,7 @@ class rubiks_cube:
         for __face in self.__rubiks_cube_pattern:
             print __face
 
-rubiks_cube_instance = rubiks_cube(rubiks_cube_pattern)
+rubiks_cube_instance = rubiks_cube()
 
 rubiks_cube_instance.verify_init_state()
 
