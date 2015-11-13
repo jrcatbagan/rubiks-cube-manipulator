@@ -6,6 +6,7 @@
 # front, bottom, back, top, right, and then left.
 
 import sys
+import copy
 
 rubiks_cube_pattern = \
 [
@@ -101,10 +102,57 @@ class rubiks_cube:
     # Display the current pattern of the Rubik's Cube
     def display(self):
         for __face in self.__rubiks_cube_pattern:
-            print __face
+            for __row in __face:
+                print __row
+            print "\n"
+
+    def display_up_face(self):
+        for __row in self.__rubiks_cube_pattern[self.__up]:
+            print __row
+
+    # Rubik's Cube move operations
+
+    # Twist "up" face clockwise
+    def twist_up_cw(self):
+        __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
+        self.__rubiks_cube_pattern[self.__up][0][2] = \
+                __temp_face[0][0]
+        self.__rubiks_cube_pattern[self.__up][0][1] = \
+                __temp_face[1][0]
+        self.__rubiks_cube_pattern[self.__up][0][0] = \
+                __temp_face[2][0]
+        self.__rubiks_cube_pattern[self.__up][1][2] = \
+                __temp_face[0][1]
+        self.__rubiks_cube_pattern[self.__up][1][1] = \
+                __temp_face[1][1]
+        self.__rubiks_cube_pattern[self.__up][1][0] = \
+                __temp_face[2][1]
+        self.__rubiks_cube_pattern[self.__up][2][2] = \
+                __temp_face[0][2]
+        self.__rubiks_cube_pattern[self.__up][2][1] = \
+                __temp_face[1][2]
+        self.__rubiks_cube_pattern[self.__up][2][0] = \
+                __temp_face[2][2]
+
+        __temp_row = copy.deepcopy(self.__rubiks_cube_pattern[self.__front][0])
+        self.__rubiks_cube_pattern[self.__front][0] = \
+                self.__rubiks_cube_pattern[self.__right][0]
+        self.__rubiks_cube_pattern[self.__right][0] = \
+                self.__rubiks_cube_pattern[self.__back][0]
+        self.__rubiks_cube_pattern[self.__back][0] = \
+                self.__rubiks_cube_pattern[self.__left][0]
+        self.__rubiks_cube_pattern[self.__left][0] = \
+                __temp_row
 
 rubiks_cube_instance = rubiks_cube()
+#rubiks_cube_instance = rubiks_cube(rubiks_cube_pattern)
 
 rubiks_cube_instance.verify_init_state()
+
+rubiks_cube_instance.display()
+
+rubiks_cube_instance.twist_up_cw()
+
+print "\n"
 
 rubiks_cube_instance.display()
