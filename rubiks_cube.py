@@ -247,7 +247,7 @@ class rubiks_cube:
                     self.__rubiks_cube_pattern[self.__back][1][2]
             self.__rubiks_cube_pattern[self.__up][2][0] = \
                     self.__rubiks_cube_pattern[self.__back][0][2]
-            # Updating the "front" face
+            # Updating the "back" face
             self.__rubiks_cube_pattern[self.__back][0][2] = \
                     self.__rubiks_cube_pattern[self.__down][2][0]
             self.__rubiks_cube_pattern[self.__back][1][2] = \
@@ -261,7 +261,7 @@ class rubiks_cube:
                     self.__rubiks_cube_pattern[self.__front][1][0]
             self.__rubiks_cube_pattern[self.__down][2][0] = \
                     self.__rubiks_cube_pattern[self.__front][2][0]
-            # Updating the "back" face
+            # Updating the "front" face
             self.__rubiks_cube_pattern[self.__front][0][0] = \
                     __temp_face[0][0]
             self.__rubiks_cube_pattern[self.__front][1][0] = \
