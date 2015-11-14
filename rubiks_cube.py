@@ -8,6 +8,13 @@
 import sys
 import copy
 
+FRONT_FACE = 0
+DOWN_FACE = 1
+BACK_FACE = 2
+UP_FACE = 3
+RIGHT_FACE = 4
+LEFT_FACE = 5
+
 rubiks_cube_default_pattern = \
 [
         [['r', 'r', 'r'],
@@ -41,7 +48,7 @@ class rubiks_cube:
     # Constructor
     def __init__(self, rubiks_cube_pattern = rubiks_cube_default_pattern):
         self.__rubiks_cube_pattern = rubiks_cube_pattern
-    
+
     # Verify whether the initial pattern of the Rubik's Cube is valid by
     # determining whether all the colors have the same count and are equal
     # to 9.
@@ -84,42 +91,184 @@ class rubiks_cube:
                 print __row
             print "\n"
 
-    def display_up_face(self):
-        for __row in self.__rubiks_cube_pattern[self.__up]:
+    def display_face(self, face):
+        for __row in self.__rubiks_cube_pattern[face]:
             print __row
 
     # Rubik's Cube move operations
     # Twist "up" face clockwise
-    def twist_up_cw(self):
-        __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
-        self.__rubiks_cube_pattern[self.__up][0][2] = \
+    def twist_face_cw(self, face):
+        __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[face])
+        self.__rubiks_cube_pattern[face][0][2] = \
                 __temp_face[0][0]
-        self.__rubiks_cube_pattern[self.__up][0][1] = \
+        self.__rubiks_cube_pattern[face][0][1] = \
                 __temp_face[1][0]
-        self.__rubiks_cube_pattern[self.__up][0][0] = \
+        self.__rubiks_cube_pattern[face][0][0] = \
                 __temp_face[2][0]
-        self.__rubiks_cube_pattern[self.__up][1][2] = \
+        self.__rubiks_cube_pattern[face][1][2] = \
                 __temp_face[0][1]
-        self.__rubiks_cube_pattern[self.__up][1][1] = \
+        self.__rubiks_cube_pattern[face][1][1] = \
                 __temp_face[1][1]
-        self.__rubiks_cube_pattern[self.__up][1][0] = \
+        self.__rubiks_cube_pattern[face][1][0] = \
                 __temp_face[2][1]
-        self.__rubiks_cube_pattern[self.__up][2][2] = \
+        self.__rubiks_cube_pattern[face][2][2] = \
                 __temp_face[0][2]
-        self.__rubiks_cube_pattern[self.__up][2][1] = \
+        self.__rubiks_cube_pattern[face][2][1] = \
                 __temp_face[1][2]
-        self.__rubiks_cube_pattern[self.__up][2][0] = \
+        self.__rubiks_cube_pattern[face][2][0] = \
                 __temp_face[2][2]
 
-        __temp_row = copy.deepcopy(self.__rubiks_cube_pattern[self.__front][0])
-        self.__rubiks_cube_pattern[self.__front][0] = \
-                self.__rubiks_cube_pattern[self.__right][0]
-        self.__rubiks_cube_pattern[self.__right][0] = \
-                self.__rubiks_cube_pattern[self.__back][0]
-        self.__rubiks_cube_pattern[self.__back][0] = \
-                self.__rubiks_cube_pattern[self.__left][0]
-        self.__rubiks_cube_pattern[self.__left][0] = \
-                __temp_row
+        if face == FRONT_FACE:
+            __temp_face = \
+                    copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
+            # Updating the "up" face
+            self.__rubiks_cube_pattern[self.__up][2][0] = \
+                    self.__rubiks_cube_pattern[self.__left][2][2]
+            self.__rubiks_cube_pattern[self.__up][2][1] = \
+                    self.__rubiks_cube_pattern[self.__left][1][2]
+            self.__rubiks_cube_pattern[self.__up][2][2] = \
+                    self.__rubiks_cube_pattern[self.__left][0][2]
+            # Updating the "left" face
+            self.__rubiks_cube_pattern[self.__left][0][2] = \
+                    self.__rubiks_cube_pattern[self.__down][0][0]
+            self.__rubiks_cube_pattern[self.__left][1][2] = \
+                    self.__rubiks_cube_pattern[self.__down][0][1]
+            self.__rubiks_cube_pattern[self.__left][2][2] = \
+                    self.__rubiks_cube_pattern[self.__down][0][2]
+            # Updating the "down" face
+            self.__rubiks_cube_pattern[self.__down][0][0] = \
+                    self.__rubiks_cube_pattern[self.__right][2][0]
+            self.__rubiks_cube_pattern[self.__down][0][1] = \
+                    self.__rubiks_cube_pattern[self.__right][1][0]
+            self.__rubiks_cube_pattern[self.__down][0][2] = \
+                    self.__rubiks_cube_pattern[self.__right][0][0]
+            # Updating the "right" face
+            self.__rubiks_cube_pattern[self.__right][0][0] = \
+                    __temp_face[2][0]
+            self.__rubiks_cube_pattern[self.__right][1][0] = \
+                    __temp_face[2][1]
+            self.__rubiks_cube_pattern[self.__right][2][0] = \
+                    __temp_face[2][2]
+        elif face == DOWN_FACE:
+            __temp_row = \
+                    copy.deepcopy(self.__rubiks_cube_pattern[self.__front][2])
+            # Updating the "front" face
+            self.__rubiks_cube_pattern[self.__front][2] = \
+                    self.__rubiks_cube_pattern[self.__left][2]
+            # Updating the "left" face
+            self.__rubiks_cube_pattern[self.__left][2] = \
+                    self.__rubiks_cube_pattern[self.__back][2]
+            # Updating the "back" face
+            self.__rubiks_cube_pattern[self.__back][2] = \
+                    self.__rubiks_cube_pattern[self.__right][2]
+            # Updating the "right" face
+            self.__rubiks_cube_pattern[self.__right][2] = \
+                    __temp_row;
+        elif face == BACK_FACE:
+            __temp_face = \
+                    copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
+            # Updating the "up" face
+            self.__rubiks_cube_pattern[self.__up][0][0] = \
+                    self.__rubiks_cube_pattern[self.__right][0][2]
+            self.__rubiks_cube_pattern[self.__up][0][1] = \
+                    self.__rubiks_cube_pattern[self.__right][1][2]
+            self.__rubiks_cube_pattern[self.__up][0][2] = \
+                    self.__rubiks_cube_pattern[self.__right][2][2]
+            # Updating the "right" face
+            self.__rubiks_cube_pattern[self.__right][0][2] = \
+                    self.__rubiks_cube_pattern[self.__down][2][2]
+            self.__rubiks_cube_pattern[self.__right][1][2] = \
+                    self.__rubiks_cube_pattern[self.__down][2][1]
+            self.__rubiks_cube_pattern[self.__right][2][2] = \
+                    self.__rubiks_cube_pattern[self.__down][2][0]
+            # Updating the "down" face
+            self.__rubiks_cube_pattern[self.__down][2][0] = \
+                    self.__rubiks_cube_pattern[self.__left][0][0]
+            self.__rubiks_cube_pattern[self.__down][2][1] = \
+                    self.__rubiks_cube_pattern[self.__left][1][0]
+            self.__rubiks_cube_pattern[self.__down][2][2] = \
+                    self.__rubiks_cube_pattern[self.__left][2][0]
+            # Updating the "left" face
+            self.__rubiks_cube_pattern[self.__left][0][0] = \
+                    __temp_face[0][2]
+            self.__rubiks_cube_pattern[self.__left][1][0] = \
+                    __temp_face[0][1]
+            self.__rubiks_cube_pattern[self.__left][2][0] = \
+                    __temp_face[0][0]
+        elif face == UP_FACE:
+            __temp_row = \
+                    copy.deepcopy(self.__rubiks_cube_pattern[self.__front][0])
+            self.__rubiks_cube_pattern[self.__front][0] = \
+                    self.__rubiks_cube_pattern[self.__right][0]
+            self.__rubiks_cube_pattern[self.__right][0] = \
+                    self.__rubiks_cube_pattern[self.__back][0]
+            self.__rubiks_cube_pattern[self.__back][0] = \
+                    self.__rubiks_cube_pattern[self.__left][0]
+            self.__rubiks_cube_pattern[self.__left][0] = \
+                    __temp_row
+        elif face == RIGHT_FACE:
+            __temp_face = \
+                    copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
+            # Updating the "up" face
+            self.__rubiks_cube_pattern[self.__up][0][2] = \
+                    self.__rubiks_cube_pattern[self.__front][0][2]
+            self.__rubiks_cube_pattern[self.__up][1][2] = \
+                    self.__rubiks_cube_pattern[self.__front][1][2]
+            self.__rubiks_cube_pattern[self.__up][2][2] = \
+                    self.__rubiks_cube_pattern[self.__front][2][2]
+            # Updating the "front" face
+            self.__rubiks_cube_pattern[self.__front][0][2] = \
+                    self.__rubiks_cube_pattern[self.__down][0][2]
+            self.__rubiks_cube_pattern[self.__front][1][2] = \
+                    self.__rubiks_cube_pattern[self.__down][1][2]
+            self.__rubiks_cube_pattern[self.__front][2][2] = \
+                    self.__rubiks_cube_pattern[self.__down][2][2]
+            # Updating the "down" face
+            self.__rubiks_cube_pattern[self.__down][0][2] = \
+                    self.__rubiks_cube_pattern[self.__back][2][0]
+            self.__rubiks_cube_pattern[self.__down][1][2] = \
+                    self.__rubiks_cube_pattern[self.__back][1][0]
+            self.__rubiks_cube_pattern[self.__down][2][2] = \
+                    self.__rubiks_cube_pattern[self.__back][0][0]
+            # Updating the "back" face
+            self.__rubiks_cube_pattern[self.__back][0][0] = \
+                    __temp_face[2][2]
+            self.__rubiks_cube_pattern[self.__back][1][0] = \
+                    __temp_face[1][2]
+            self.__rubiks_cube_pattern[self.__back][2][0] = \
+                    __temp_face[0][2]
+        elif face == LEFT_FACE:
+            __temp_face = \
+                    copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
+            # Updating the "up" face
+            self.__rubiks_cube_pattern[self.__up][0][0] = \
+                    self.__rubiks_cube_pattern[self.__back][2][2]
+            self.__rubiks_cube_pattern[self.__up][1][0] = \
+                    self.__rubiks_cube_pattern[self.__back][1][2]
+            self.__rubiks_cube_pattern[self.__up][2][0] = \
+                    self.__rubiks_cube_pattern[self.__back][0][2]
+            # Updating the "front" face
+            self.__rubiks_cube_pattern[self.__back][0][2] = \
+                    self.__rubiks_cube_pattern[self.__down][2][0]
+            self.__rubiks_cube_pattern[self.__back][1][2] = \
+                    self.__rubiks_cube_pattern[self.__down][1][0]
+            self.__rubiks_cube_pattern[self.__back][2][2] = \
+                    self.__rubiks_cube_pattern[self.__down][0][0]
+            # Updating the "down" face
+            self.__rubiks_cube_pattern[self.__down][0][0] = \
+                    self.__rubiks_cube_pattern[self.__front][0][0]
+            self.__rubiks_cube_pattern[self.__down][1][0] = \
+                    self.__rubiks_cube_pattern[self.__front][1][0]
+            self.__rubiks_cube_pattern[self.__down][2][0] = \
+                    self.__rubiks_cube_pattern[self.__front][2][0]
+            # Updating the "back" face
+            self.__rubiks_cube_pattern[self.__front][0][0] = \
+                    __temp_face[0][0]
+            self.__rubiks_cube_pattern[self.__front][1][0] = \
+                    __temp_face[1][0]
+            self.__rubiks_cube_pattern[self.__front][2][0] = \
+                    __temp_face[2][0]
+
     # Twist "up" face counter-clockwise
     def twist_up_ccw(self):
         __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[self.__up])
