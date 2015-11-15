@@ -112,7 +112,7 @@ class rubiks_cube:
 
     # Perform a clockwise twist operation on the specified face
     def twist_face_cw(self, face):
-        self.__rubiks_cube_pattern[face]= \
+        self.__rubiks_cube_pattern[face] = \
                 numpy.transpose(self.__rubiks_cube_pattern[face])
         self.__rubiks_cube_pattern[face] = \
                 numpy.fliplr(self.__rubiks_cube_pattern[face])
@@ -245,3 +245,172 @@ class rubiks_cube:
                     numpy.flipud(self.__rubiks_cube_pattern[BACK_FACE])[:,2]
             self.__rubiks_cube_pattern[BACK_FACE][:,2] = \
                     numpy.flipud(__temp_face[:,0])
+
+    # Rotate the cube on the axis of rotation perpendicular to the face
+    # specified
+    def rotate_face_cw(self, face):
+        self.__rubiks_cube_pattern[face] = \
+                numpy.transpose(self.__rubiks_cube_pattern[face])
+        self.__rubiks_cube_pattern[face] = \
+                numpy.fliplr(self.__rubiks_cube_pattern[face])
+
+        if face == FRONT_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.fliplr(numpy.transpose
+                            (self.__rubiks_cube_pattern[LEFT_FACE]))
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    numpy.fliplr(numpy.transpose
+                            (self.__rubiks_cube_pattern[DOWN_FACE]))
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.fliplr(numpy.transpose
+                            (self.__rubiks_cube_pattern[RIGHT_FACE]))
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    numpy.fliplr(numpy.transpose(__temp_face))
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[BACK_FACE]))
+        elif face == DOWN_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[FRONT_FACE])
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    self.__rubiks_cube_pattern[LEFT_FACE]
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    self.__rubiks_cube_pattern[BACK_FACE]
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    self.__rubiks_cube_pattern[RIGHT_FACE]
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    __temp_face
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[UP_FACE]))
+        elif face == BACK_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[RIGHT_FACE]))
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[DOWN_FACE]))
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[LEFT_FACE]))
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (__temp_face))
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[FRONT_FACE]))
+        elif face == UP_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[FRONT_FACE])
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    self.__rubiks_cube_pattern[RIGHT_FACE]
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    self.__rubiks_cube_pattern[BACK_FACE]
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    self.__rubiks_cube_pattern[LEFT_FACE]
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    __temp_face
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.transpose(numpy.fliplr
+                            (self.__rubiks_cube_pattern[DOWN_FACE]))
+        elif face == RIGHT_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    self.__rubiks_cube_pattern[FRONT_FACE]
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    self.__rubiks_cube_pattern[DOWN_FACE]
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[BACK_FACE], 2)
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    numpy.rot90(__temp_face, 2)
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[LEFT_FACE])
+        elif face == LEFT_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[BACK_FACE], 2)
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[DOWN_FACE], 2)
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    self.__rubiks_cube_pattern[FRONT_FACE]
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    __temp_face
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[RIGHT_FACE])
+
+    def rotate_face_ccw(self, face):
+        self.__rubiks_cube_pattern[face] = \
+                numpy.rot90(self.__rubiks_cube_pattern[face])
+
+        if face == FRONT_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[RIGHT_FACE])
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[DOWN_FACE])
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[LEFT_FACE])
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    numpy.rot90(__temp_face)
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[BACK_FACE], 3)
+        elif face == DOWN_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[FRONT_FACE])
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    self.__rubiks_cube_pattern[RIGHT_FACE]
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    self.__rubiks_cube_pattern[BACK_FACE]
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    self.__rubiks_cube_pattern[LEFT_FACE]
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    __temp_face
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[UP_FACE], 3)
+        elif face == BACK_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[LEFT_FACE], 3)
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[DOWN_FACE], 3)
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[RIGHT_FACE], 3)
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    numpy.rot90(__temp_face, 3)
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[FRONT_FACE], 3)
+        elif face == UP_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[FRONT_FACE])
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    self.__rubiks_cube_pattern[LEFT_FACE]
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    self.__rubiks_cube_pattern[BACK_FACE]
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    self.__rubiks_cube_pattern[RIGHT_FACE]
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    __temp_face
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[DOWN_FACE], 3)
+        elif face == RIGHT_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[BACK_FACE], 2)
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[DOWN_FACE], 2)
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    self.__rubiks_cube_pattern[FRONT_FACE]
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    __temp_face
+            self.__rubiks_cube_pattern[LEFT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[LEFT_FACE], 3)
+        elif face == LEFT_FACE:
+            __temp_face = copy.deepcopy(self.__rubiks_cube_pattern[UP_FACE])
+            self.__rubiks_cube_pattern[UP_FACE] = \
+                    self.__rubiks_cube_pattern[FRONT_FACE]
+            self.__rubiks_cube_pattern[FRONT_FACE] = \
+                    self.__rubiks_cube_pattern[DOWN_FACE]
+            self.__rubiks_cube_pattern[DOWN_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[BACK_FACE], 2)
+            self.__rubiks_cube_pattern[BACK_FACE] = \
+                    numpy.rot90(__temp_face, 2)
+            self.__rubiks_cube_pattern[RIGHT_FACE] = \
+                    numpy.rot90(self.__rubiks_cube_pattern[RIGHT_FACE], 3)
