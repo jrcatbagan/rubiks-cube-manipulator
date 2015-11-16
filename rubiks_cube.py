@@ -414,3 +414,60 @@ class rubiks_cube:
                     numpy.rot90(__temp_face, 2)
             self.__rubiks_cube_pattern[RIGHT_FACE] = \
                     numpy.rot90(self.__rubiks_cube_pattern[RIGHT_FACE], 3)
+
+    # Return current pattern of Rubik's Cube
+    def get_current_pattern(self):
+        return self.__rubiks_cube_pattern
+
+    def get_center_color_face_pos(self, color):
+        __index = 0
+        for __face in self.__rubiks_cube_pattern:
+            if __face[1][1] == color:
+                return __index
+            __index += 1
+
+    def print_center_color_face_pos(self, color):
+        __face_pos = 0
+        for __face in self.__rubiks_cube_pattern:
+            if __face[1][1] == color:
+                if __face_pos == FRONT_FACE:
+                    print "front face"
+                elif __face_pos == DOWN_FACE:
+                    print "down face"
+                elif __face_pos == BACK_FACE:
+                    print "back face"
+                elif __face_pos == UP_FACE:
+                    print "up face"
+                elif __face_pos == RIGHT_FACE:
+                    print "right face"
+                elif __face_pos == LEFT_FACE:
+                    print "left face"
+            __face_pos += 1
+
+    def place_center_color_to_up(self, color):
+        __face_pos = self.get_center_color_face_pos(color)
+
+        if __face_pos == FRONT_FACE:
+            self.rotate_face_cw(RIGHT_FACE)
+        elif __face_pos == DOWN_FACE:
+            self.rotate_face_cw(FRONT_FACE)
+            self.rotate_face_cw(FRONT_FACE)
+        elif __face_pos == BACK_FACE:
+            self.rotate_face_cw(LEFT_FACE)
+        elif __face_pos == UP_FACE:
+            pass
+        elif __face_pos == RIGHT_FACE:
+            self.rotate_face_cw(BACK_FACE)
+        elif __face_pos == LEFT_FACE:
+            self.rotate_face_cw(FRONT_FACE)
+
+    def init_starting_pos(self):
+        self.place_center_color_to_up(W)
+        __face_pos = self.get_center_color_face_pos(R)
+        if __face_pos == LEFT_FACE:
+            self.rotate_face_ccw(UP_FACE)
+        elif __face_pos == BACK_FACE:
+            self.rotate_face_cw(UP_FACE)
+            self.rotate_face_cw(UP_FACE)
+        elif __face_pos == RIGHT_FACE:
+            self.rotate_face_cw(UP_FACE)
