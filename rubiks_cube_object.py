@@ -1,5 +1,10 @@
 #!/usr/bin/python2.7
 
+#-----------------------------------------------------------------------------
+# Some constants to aid in indexing and manipulating the Rubik's Cube
+# data structure
+
+# Face defines
 FRONT = 0
 LEFT = 1
 BACK = 2
@@ -7,6 +12,7 @@ RIGHT = 3
 UP = 4
 DOWN = 5
 
+# Color defines
 RED = 0
 GREEN = 1
 ORANGE = 2
@@ -14,9 +20,11 @@ BLUE = 3
 WHITE = 4
 YELLOW = 5
 
+# Rotation defines
 CW = 0
 CCW = 1
 
+# Default state of Rubik's Cube
 _rubiks_cube_default_state = \
 [
     [
@@ -73,6 +81,7 @@ _rubiks_cube_default_state = \
 
 ]
 
+# ANSI code
 color_code = \
 [
     '\033[91m' + u'\u25fc' + '\033[0m',
@@ -381,3 +390,127 @@ class rubiks_cube_object:
                             __cubie[__color] = LEFT
                         elif __face == LEFT:
                             __cubie[__color] = FRONT
+
+    def solve_top_corners(self):
+
+       #          5-----------6
+       #         /|          /|
+       #        / |         / |
+       #       /  |        /  |
+       #      1-----------2   |
+       #      |   |       |   |
+       #      |   7-------|---8
+       #      |  /        |  /
+       #      | /         | /
+       #      |/          |/
+       #      3-----------4
+
+        CORNER_POS_1 = 0
+        CORNER_POS_2 = 1
+        CORNER_POS_3 = 2
+        CORNER_POS_4 = 3
+        CORNER_POS_5 = 4
+        CORNER_POS_6 = 5
+        CORNER_POS_7 = 6
+        CORNER_POS_8 = 7
+
+        __corner_position = 0
+
+        R = self.twist_face(RIGHT, CW)
+        R_ = self.twist_face(RIGHT, CCW)
+        L = self.twist_face(LEFT, CW)
+        L_ = self.twist_face(LEFT, CCW)
+        F  = self.twist_face(FRONT, CW)
+        F_ = self.twist_face(FRONT, CCW)
+        B = self.twist_face(BACK, CW)
+        B_ = self.twist_face(BACK, CCW)
+        U = self.twist_face(UP, CW)
+        U_ = self.twist_face(UP, CCW)
+        D = self.twist_face(DOWN, CW)
+        D_ = self.twist_face(DOWN, CCW)
+
+        for __layer in range(0, 3, 2):
+            for __row in range(0, 3, 2):
+                for __column in range(0, 3, 2):
+                    __cubie = self.__rubiks_cube_state[__layer][__row][__column]
+                    if GREEN in __cubie and RED in __cubie and \
+                              WHITE in __cubie:
+                        __cubie_UFL = __corner_position
+                    __corner_position += 1
+
+        if __cubie_UFL == CORNER_POS_1:
+            if __cubie_UFL[WHITE] == LEFT:
+                self.twist_face(LEFT, CW)
+                self.twist_face(DOWN, CW)
+                self.twist_face(LEFT, CCW)
+                self.twist_face(DOWN, CCW)
+                self.twist_face(DOWN, CCW)
+                self.twist_face(FRONT, CCW)
+                self.twist_face(DOWN, CW)
+                self.twist_face(FRONT, CW)
+            elif __cubie_UFL[WHITE] == FRONT:
+                self.twist_face(FRONT, CCW)
+                self.twist_face(DOWN, CCW)
+                self.twist_face(FRONT, CW)
+                self.twist_face(DOWN, CW)
+                self.twist_face(DOWN, CW)
+                self.twist_face(LEFT, CW)
+                self.twist_face(DOWN, CCW)
+                self.twist_face(LEFT, CCW)
+        elif __cubie_UFL == CORNER_POS_2:
+            if __cubie_UFL[WHITE] == RIGHT:
+                R_
+                L
+                D_
+                R
+                L_
+            elif __cubie__UFL[WHITE] == FRONT:
+                F
+                D
+                F_
+                D
+                F_
+                D
+                F
+            elif __cubie_UFL[WHITE] == UP:
+                R_
+                D_
+                D_
+                R
+                F_
+                D
+                F
+
+
+
+
+#        # Using the a    __cubie_UFL = __corner_position         bove diagram indicating the indices corresponding to the
+#        # corners of the cube, we search for the positions of the corner cubies
+#        # that go on the top layer
+#        for __layer in range(0, 3, 2):
+#            for __row in range(0, 3, 2):
+#                for __column in range(0, 3, 2):
+#                    __cubie = self.__rubiks_cube_state[__layer][__row][__column]
+#
+#                    if GREEN in __cubie and RED in __cubie and \
+#                            WHITE in __cubie:
+#                        __cubie_UFL = __corner_position
+#                    elif BLUE in __cubie and RED in __cubie and \
+#                            WHITE in __cubie:
+#                        __cubie_UFR = __corner_position
+#                    elif GREEN in __cubie and ORANGE in __cubie and \
+#                            WHITE in __cubie:
+#                        __cubie_UBL = __corner_position
+#                    elif BLUE in __cubie and ORANGE in __cubie and \
+#                            WHITE in __cubie:
+#                        __cubie_UBR = __corner_position
+#
+#                    __corner_position += 1
+#
+#        if __cubie_UFL ==  CORNER_POS_1:
+#            if __cubie_UFL[WHITE] == FRONT:
+
+
+
+
+
