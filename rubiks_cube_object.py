@@ -858,4 +858,105 @@ class rubiks_cube_object:
 
             self.rotate_cube(UP, CW)
 
+    def get_total_moves(self):
+        return self.__total_moves
+
+    def solve_middle_layer(self):
+        self.rotate_cube(FRONT, CW)
+        self.rotate_cube(FRONT, CW)
+
+        EDGE_POS_UNDEFINED = -1
+        EDGE_POS1 = 0
+        EDGE_POS2 = 1
+        EDGE_POS3 = 2
+        EDGE_POS4 = 3
+        EDGE_POS5 = 4
+        EDGE_POS6 = 5
+        EDGE_POS7 = 6
+        EDGE_POS8 = 7
+        EDGE_POS9 = 8
+        EDGE_POS10 = 9
+        EDGE_POS11 = 10
+        EDGE_POS12 = 11
+
+        __cubie_color = \
+        [
+            [BLUE, RED],
+            [RED, GREEN],
+            [GREEN, ORANGE],
+            [ORANGE, BLUE]
+        ]
+
+        # First remove all the middle layer edge pieces at interest if they
+        # are not in the right place to the top layer
+        for __cubie_index in range(0, 4):
+            __cubie = self.__rubiks_cube[0][1][0]
+            if __cubie_color[__cubie_index][0] in __cubie and \
+                    __cubie_color[__cubie_index][1] in __cubie:
+                if __cubie[__cubie_color[__cubie_index][1]] == FRONT:
+                    pass
+                else:
+                    if YELLOW in self.__rubiks_cube[0][0][1].keys():
+                        self.algorithm("U' L' U L U F U' F'")
+                    elif YELLOW in self.__rubiks_cube[1][0][0].keys():
+                        self.algorithm("U' U' L' U L U F U' F'")
+                    elif YELLOW in self.__rubiks_cube[1][0][2].keys():
+                        self.algorithm("L' U L U F U' F'")
+                    elif YELLOW in self.__rubiks_cube[2][0][1].keys():
+                        self.algorithm("U L' U L U F U' F'")
+            else:
+                if YELLOW in __cubie.keys():
+                    pass
+                else:
+                    if YELLOW in self.__rubiks_cube[0][0][1].keys():
+                        self.algorithm("U' L' U L U F U' F'")
+                    elif YELLOW in self.__rubiks_cube[1][0][0].keys():
+                        self.algorithm("U' U' L' U L U F U' F'")
+                    elif YELLOW in self.__rubiks_cube[1][0][2].keys():
+                        self.algorithm("L' U L U F U' F'")
+                    elif YELLOW in self.__rubiks_cube[2][0][1].keys():
+                        self.algorithm("U L' U L U F U' F'")
+            self.rotate_cube(UP, CW)
+
+        # Now place the middle layer edge pieces from the top layer to the
+        # right locations
+        for __cubie_index in range(0, 4):
+            for __layer in range(0, 3):
+                if __layer == 0:
+                    __cubie = self.__rubiks_cube[__layer][0][1]
+                    if __cubie_color[__cubie_index][0] in __cubie and \
+                            __cubie_color[__cubie_index][1] in __cubie:
+                        if __cubie[__cubie_color[__cubie_index][1]] == FRONT:
+                            self.algorithm("U' L' U L U F U' F'")
+                        else:
+                            self.algorithm("U U F U' F' U' L' U L")
+                elif __layer == 1:
+                    for __column in range(0, 3, 2):
+                        __cubie = self.__rubiks_cube[__layer][0][__column]
+                        if __cubie_color[__cubie_index][0] in __cubie and \
+                                __cubie_color[__cubie_index][1] in __cubie:
+                            if __column == 0:
+                                if __cubie[__cubie_color[__cubie_index][1]] == \
+                                        LEFT:
+                                    self.algorithm("U' U' L' U L U F U' F'")
+                                elif __cubie[__cubie_color[__cubie_index][1]] == \
+                                        UP:
+                                    self.algorithm("U F U' F' U' L' U L")
+                            elif __column == 2:
+                                if __cubie[__cubie_color[__cubie_index][1]] == \
+                                        RIGHT:
+                                    self.algorithm("L' U L U F U' F'")
+                                elif __cubie[__cubie_color[__cubie_index][1]] == \
+                                        UP:
+                                    self.algorithm("U' F U' F' U' L' U L")
+                elif __layer == 2:
+                    __cubie = self.__rubiks_cube[__layer][0][1]
+                    if __cubie_color[__cubie_index][0] in __cubie and \
+                            __cubie_color[__cubie_index][1] in __cubie:
+                        if __cubie[__cubie_color[__cubie_index][1]] == BACK:
+                            self.algorithm("U L' U L U F U' F'")
+                        elif __cubie[__cubie_color[__cubie_index][1]] == UP:
+                            self.algorithm("F U' F' U' L' U L")
+            self.rotate_cube(UP, CW)
+
 
