@@ -100,6 +100,7 @@ color_code = \
 class rubiks_cube_object:
     def __init__(self, rubiks_cube_init_state = _rubiks_cube_default_state):
         self.__rubiks_cube = rubiks_cube_init_state
+        self.__total_moves = 0
 
     def get_current_state(self):
         return self.__rubiks_cube
@@ -573,6 +574,7 @@ class rubiks_cube_object:
                 __operation += sequence[i]
 
             if sequence[i] == ' ' or i == len(sequence) - 1:
+                self.__total_moves += 1
                 if __operation == "R":
                     self.twist_face(RIGHT, CW)
                     print "R",
@@ -723,3 +725,137 @@ class rubiks_cube_object:
                     self.algorithm("D D F' D F D' L D' L'")
 
             self.rotate_cube(UP, CW)
+
+    def solve_top_edges(self):
+        #     -----9-----
+        #    /|        /|
+        #   5 |       6 |
+        #  /  10     /  11
+        # -----1-----   |
+        # |   |     |   |
+        # |   ----12|---|
+        # 2  /      3  /
+        # | 7       | 8
+        # |/        |/
+        # -----4-----
+
+        EDGE_POS_UNDEFINED = -1
+        EDGE_POS1 = 0
+        EDGE_POS2 = 1
+        EDGE_POS3 = 2
+        EDGE_POS4 = 3
+        EDGE_POS5 = 4
+        EDGE_POS6 = 5
+        EDGE_POS7 = 6
+        EDGE_POS8 = 7
+        EDGE_POS9 = 8
+        EDGE_POS10 = 9
+        EDGE_POS11 = 10
+        EDGE_POS12 = 11
+
+        __cubie_color = \
+        [
+            [RED, WHITE],
+            [BLUE, WHITE],
+            [ORANGE, WHITE],
+            [GREEN, WHITE]
+        ]
+
+        # Resolve the top layer edges cubie by cubie
+        for __cubie_index in range(0, 4):
+            __edge_position = 0
+
+            # Locate for the top layer edge cubie at interest
+            for __layer in range(0, 3):
+                if __layer == 1:
+                    for __row in range(0, 3, 2):
+                        for __column in range(0, 3, 2):
+                            __cubie = self.__rubiks_cube[__layer][__row][__column]
+                            if __cubie_color[__cubie_index][0] in __cubie and \
+                                    __cubie_color[__cubie_index][1] in __cubie:
+                                __cubie_position = __edge_position
+                                __edge_cubie = __cubie
+                            else:
+                                __edge_position += 1
+                else:
+                    for __row in range(0, 3):
+                        if __row == 1:
+                            for __column in range(0, 3, 2):
+                                __cubie = self.__rubiks_cube[__layer][__row][__column]
+                                if __cubie_color[__cubie_index][0] in __cubie and \
+                                        __cubie_color[__cubie_index][1] in __cubie:
+                                    __cubie_position = __edge_position
+                                    __edge_cubie = __cubie
+                                else:
+                                    __edge_position += 1
+                        else:
+                            __cubie = self.__rubiks_cube[__layer][__row][1]
+                            if __cubie_color[__cubie_index][0] in __cubie and \
+                                    __cubie_color[__cubie_index][1] in __cubie:
+                                __cubie_position = __edge_position
+                                __edge_cubie = __cubie
+                            else:
+                                __edge_position += 1
+
+            if __cubie_position == EDGE_POS1:
+                if __edge_cubie[WHITE] == FRONT:
+                    self.algorithm("F F D R F' R'")
+            elif __cubie_position == EDGE_POS2:
+                if __edge_cubie[WHITE] == LEFT:
+                    self.algorithm("F")
+                elif __edge_cubie[WHITE] == FRONT:
+                    self.algorithm("F' D R F' R'")
+            elif __cubie_position == EDGE_POS3:
+                if __edge_cubie[WHITE] == RIGHT:
+                    self.algorithm("F'")
+                elif __edge_cubie[WHITE] == FRONT:
+                    self.algorithm("F D R F' R'")
+            elif __cubie_position == EDGE_POS4:
+                if __edge_cubie[WHITE] == FRONT:
+                    self.algorithm("D R F' R'")
+                elif __edge_cubie[WHITE] == DOWN:
+                    self.algorithm("F F")
+            elif __cubie_position == EDGE_POS5:
+                if __edge_cubie[WHITE] == LEFT:
+                    self.algorithm("L F")
+                elif __edge_cubie[WHITE] == UP:
+                    self.algorithm("L L D F F")
+            elif __cubie_position == EDGE_POS6:
+                if __edge_cubie[WHITE] == RIGHT:
+                    self.algorithm("R' F'")
+                elif __edge_cubie[WHITE] == UP:
+                    self.algorithm("R' R' D' F' F'")
+            elif __cubie_position == EDGE_POS7:
+                if __edge_cubie[WHITE] == LEFT:
+                    self.algorithm("D D R F' R'")
+                elif __edge_cubie[WHITE] == DOWN:
+                    self.algorithm("D F F")
+            elif __cubie_position == EDGE_POS8:
+                if __edge_cubie[WHITE] == RIGHT:
+                    self.algorithm("R F' R")
+                elif __edge_cubie[WHITE] == DOWN:
+                    self.algorithm("D' F' F'")
+            elif __cubie_position == EDGE_POS9:
+                if __edge_cubie[WHITE] == BACK:
+                    self.algorithm("B' B' D' R F' R'")
+                elif __edge_cubie[WHITE] == UP:
+                    self.algorithm("B' B' D' D' F' F'")
+            elif __cubie_position == EDGE_POS10:
+                if __edge_cubie[WHITE] == LEFT:
+                    self.algorithm("B D' D' F' F'")
+                elif __edge_cubie[WHITE] == BACK:
+                    self.algorithm("B D' R F' R'")
+            elif __cubie_position == EDGE_POS11:
+                if __edge_cubie[WHITE] == RIGHT:
+                    self.algorithm("B' D' D' F' F'")
+                elif __edge_cubie[WHITE] == BACK:
+                    self.algorithm("B' D R F' R'")
+            elif __cubie_position == EDGE_POS12:
+                if __edge_cubie[WHITE] == BACK:
+                    self.algorithm("D R F' R'")
+                elif __edge_cubie[WHITE] == DOWN:
+                    self.algorithm("D' D' F' F'")
+
+            self.rotate_cube(UP, CW)
+
+
