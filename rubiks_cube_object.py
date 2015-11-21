@@ -1,4 +1,6 @@
 #!/usr/bin/python2.7
+#
+# Copyright (c) 2015, Jarielle Catbagan
 
 import copy
 
@@ -1115,24 +1117,26 @@ class rubiks_cube_object:
             if __edge1_color == self.__rubiks_cube[0][1][1].keys()[0]:
                 self.rotate_cube(UP, CW)
                 self.rotate_cube(UP, CW)
-                __edge_temp_color = __edge1_color
+                __temp_edge_color = copy.deepcopy(__edge1_color)
                 __edge1_color = __edge4_color
-                __edge4_color = __edge_temp_color
-                __edge_temp_color = __edge2_color
+                __edge4_color = __temp_edge_color
+                __temp_edge_color = __edge2_color
                 __edge2_color = __edge3_color
-                __edge3_color = __edge_temp_color
+                __edge3_color = __temp_edge_color
             elif __edge2_color == self.__rubiks_cube[1][1][0].keys()[0]:
                 self.rotate_cube(UP, CW)
-                __temp_edge_color = __edge1_color
+                __temp_edge_color = copy.deepcopy(__edge1_color)
                 __edge1_color = __edge3_color
                 __edge3_color = __edge4_color
                 __edge4_color = __edge2_color
+                __edge2_color = __temp_edge_color
             elif __edge3_color == self.__rubiks_cube[1][1][2].keys()[0]:
                 self.rotate_cube(UP, CCW)
-                __temp_edge_color = __edge1_color
+                __temp_edge_color = copy.deepcopy(__edge1_color)
                 __edge1_color = __edge2_color
                 __edge2_color = __edge4_color
                 __edge4_color = __edge3_color
+                __edge3_color = __temp_edge_color
 
             if __edge1_color == self.__rubiks_cube[1][1][0].keys()[0]:
                 self.algorithm("F F U L R' F F L' R U F F")
@@ -1149,24 +1153,26 @@ class rubiks_cube_object:
             if __edge1_color == self.__rubiks_cube[0][1][1].keys()[0]:
                 self.rotate_cube(UP, CW)
                 self.rotate_cube(UP, CW)
-                __edge_temp_color = __edge1_color
+                __temp_edge_color = copy.deepcopy(__edge1_color)
                 __edge1_color = __edge4_color
-                __edge4_color = __edge_temp_color
-                __edge_temp_color = __edge2_color
+                __edge4_color = __temp_edge_color
+                __temp_edge_color = __edge2_color
                 __edge2_color = __edge3_color
-                __edge3_color = __edge_temp_color
+                __edge3_color = __temp_edge_color
             elif __edge2_color == self.__rubiks_cube[1][1][0].keys()[0]:
                 self.rotate_cube(UP, CW)
-                __temp_edge_color = __edge1_color
+                __temp_edge_color = copy.deepcopy(__edge1_color)
                 __edge1_color = __edge3_color
                 __edge3_color = __edge4_color
                 __edge4_color = __edge2_color
+                __edge2_color = __temp_edge_color
             elif __edge3_color == self.__rubiks_cube[1][1][2].keys()[0]:
                 self.rotate_cube(UP, CCW)
-                __temp_edge_color = __edge1_color
+                __temp_edge_color = copy.deepcopy(__edge1_color)
                 __edge1_color = __edge2_color
                 __edge2_color = __edge4_color
                 __edge4_color = __edge3_color
+                __edge3_color = __temp_edge_color
 
             if __edge1_color == self.__rubiks_cube[1][1][0].keys()[0]:
                 self.algorithm("F F U L R' F F L' R U F F")
