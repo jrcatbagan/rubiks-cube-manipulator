@@ -959,4 +959,216 @@ class rubiks_cube_object:
                             self.algorithm("F U' F' U' L' U L")
             self.rotate_cube(UP, CW)
 
+    def solve_top_layer(self):
+        # Orient all edges with yellow side facing up
+        while 1:
+            if self.__rubiks_cube[0][0][1][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] == UP:
+                break
+            elif self.__rubiks_cube[0][0][1][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] == UP:
+                self.algorithm("U F R U R' U' F'")
+            elif self.__rubiks_cube[0][0][1][YELLOW] != UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] != UP:
+                self.algorithm("F R U R' U' F'")
+            elif self.__rubiks_cube[0][0][1][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] != UP:
+                self.algorithm("U F U R U' R' F'")
+            elif self.__rubiks_cube[0][0][1][YELLOW] != UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] == UP:
+                self.algorithm("F U R U' R' F'")
+            elif self.__rubiks_cube[0][0][1][YELLOW] != UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] == UP:
+                self.algorithm("U' F U R U' R' F'")
+            elif self.__rubiks_cube[0][0][1][YELLOW] == UP and \
+                    self.__rubiks_cube[1][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[1][0][2][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][1][YELLOW] != UP:
+                self.algorithm("U U F U R U' R' F'")
+            else:
+                self.algorithm("F U R U' R' F'")
 
+        # Orient all corners with yellow side facing up
+        while 1:
+            # All yellow corners facing up
+            if self.__rubiks_cube[0][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[0][0][2][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][2][YELLOW] == UP:
+                break
+            # No yellow corners facing up
+            elif self.__rubiks_cube[0][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[0][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][2][YELLOW] != UP:
+                while 1:
+                    if self.__rubiks_cube[0][0][0][YELLOW] == LEFT:
+                        break
+                    else:
+                        self.rotate_cube(UP, CW)
+                self.algorithm("R U R' U R U U R'")
+            # One yellow corner facing up
+            elif self.__rubiks_cube[0][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[0][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][2][YELLOW] != UP:
+                self.algorithm("R U R' U R U U R'")
+            elif self.__rubiks_cube[0][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[0][0][2][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][2][YELLOW] != UP:
+                self.algorithm("U R U R' U R U U R'")
+            elif self.__rubiks_cube[0][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[0][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][0][YELLOW] == UP and \
+                    self.__rubiks_cube[2][0][2][YELLOW] != UP:
+                self.algorithm("U' R U R' U R U U R'")
+            elif self.__rubiks_cube[0][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[0][0][2][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][0][YELLOW] != UP and \
+                    self.__rubiks_cube[2][0][2][YELLOW] == UP:
+                self.algorithm("U U R U R' U R U U R'")
+            # More than one yellow corner facing up
+            else:
+                while 1:
+                    if self.__rubiks_cube[0][0][0][YELLOW] == FRONT:
+                        break
+                    else:
+                        self.rotate_cube(UP, CW)
+
+        INCOMPLETE = 9
+        COMPLETE = 1
+
+        __corner_init_state = INCOMPLETE
+
+        while 1:
+            for __index in range(0, 4):
+                if __corner_init_state == INCOMPLETE:
+                    for __color, __face in \
+                            self.__rubiks_cube[0][0][0].iteritems():
+                        if __face == FRONT:
+                            __color1 = __color
+                    for __color, __face in \
+                            self.__rubiks_cube[0][0][2].iteritems():
+                        if __face == FRONT:
+                            __color2 = __color
+
+                    if __color1 == __color2:
+                        if __color1 == __color2 == \
+                                self.__rubiks_cube[0][1][1].keys()[0]:
+                            self.rotate_cube(UP, CCW)
+                            self.rotate_cube(UP, CCW)
+                        elif __color1 == __color2 == \
+                                self.__rubiks_cube[1][1][0].keys()[0]:
+                            self.twist_face(UP, CW)
+                            self.rotate_cube(UP, CW)
+                        elif __color1 == __color2 == \
+                                self.__rubiks_cube[1][1][2].keys()[0]:
+                            self.twist_face(UP, CCW)
+                            self.rotate_cube(UP, CCW)
+
+                        __corner_init_state = COMPLETE
+
+                self.rotate_cube(UP, CW)
+
+            if __corner_init_state == INCOMPLETE:
+                self.algorithm("R' F R' B B R F' R' B B R R U'")
+            else:
+                self.algorithm("R' F R' B B R F' R' B B R R U'")
+                break
+
+        self.display_visual()
+
+        for __color, __face in self.__rubiks_cube[0][0][1].iteritems():
+            if __face == FRONT:
+                __edge1_color = __color
+        for __color, __face in self.__rubiks_cube[1][0][0].iteritems():
+            if __face == LEFT:
+                __edge2_color = __color
+        for __color, __face in self.__rubiks_cube[1][0][2].iteritems():
+            if __face == RIGHT:
+                __edge3_color = __color
+        for __color, __face in self.__rubiks_cube[2][0][1].iteritems():
+            if __face == BACK:
+                __edge4_color = __color
+
+        # Perform the following if no top layer edges are correct
+        if __edge1_color != self.__rubiks_cube[0][1][1].keys()[0] and \
+                __edge2_color != self.__rubiks_cube[1][1][0].keys()[0] and \
+                __edge3_color != self.__rubiks_cube[1][1][2].keys()[0] and \
+                __edge4_color != self.__rubiks_cube[2][1][1].keys()[0]:
+            self.algorithm("F F U L R' F F L' R U F F")
+
+            # Position the right edge to the back face
+            if __edge1_color == self.__rubiks_cube[0][1][1].keys()[0]:
+                self.rotate_cube(UP, CW)
+                self.rotate_cube(UP, CW)
+                __edge_temp_color = __edge1_color
+                __edge1_color = __edge4_color
+                __edge4_color = __edge_temp_color
+                __edge_temp_color = __edge2_color
+                __edge2_color = __edge3_color
+                __edge3_color = __edge_temp_color
+            elif __edge2_color == self.__rubiks_cube[1][1][0].keys()[0]:
+                self.rotate_cube(UP, CW)
+                __temp_edge_color = __edge1_color
+                __edge1_color = __edge3_color
+                __edge3_color = __edge4_color
+                __edge4_color = __edge2_color
+            elif __edge3_color == self.__rubiks_cube[1][1][2].keys()[0]:
+                self.rotate_cube(UP, CCW)
+                __temp_edge_color = __edge1_color
+                __edge1_color = __edge2_color
+                __edge2_color = __edge4_color
+                __edge4_color = __edge3_color
+
+            if __edge1_color == self.__rubiks_cube[1][1][0].keys()[0]:
+                self.algorithm("F F U L R' F F L' R U F F")
+            elif __edge1_color == self.__rubiks_cube[1][1][2].keys()[0]:
+                self.algorithm("F F U' L R' F F L' R U' F F")
+
+        elif __edge1_color == self.__rubiks_cube[0][1][1].keys()[0] and \
+                __edge2_color == self.__rubiks_cube[1][1][0].keys()[0] and \
+                __edge3_color == self.__rubiks_cube[1][1][2].keys()[0] and \
+                __edge4_color == self.__rubiks_cube[2][1][1].keys()[0]:
+            pass
+        else:
+            # Position the right edge to the back face
+            if __edge1_color == self.__rubiks_cube[0][1][1].keys()[0]:
+                self.rotate_cube(UP, CW)
+                self.rotate_cube(UP, CW)
+                __edge_temp_color = __edge1_color
+                __edge1_color = __edge4_color
+                __edge4_color = __edge_temp_color
+                __edge_temp_color = __edge2_color
+                __edge2_color = __edge3_color
+                __edge3_color = __edge_temp_color
+            elif __edge2_color == self.__rubiks_cube[1][1][0].keys()[0]:
+                self.rotate_cube(UP, CW)
+                __temp_edge_color = __edge1_color
+                __edge1_color = __edge3_color
+                __edge3_color = __edge4_color
+                __edge4_color = __edge2_color
+            elif __edge3_color == self.__rubiks_cube[1][1][2].keys()[0]:
+                self.rotate_cube(UP, CCW)
+                __temp_edge_color = __edge1_color
+                __edge1_color = __edge2_color
+                __edge2_color = __edge4_color
+                __edge4_color = __edge3_color
+
+            if __edge1_color == self.__rubiks_cube[1][1][0].keys()[0]:
+                self.algorithm("F F U L R' F F L' R U F F")
+            elif __edge1_color == self.__rubiks_cube[1][1][2].keys()[0]:
+                self.algorithm("F F U' L R' F F L' R U' F F")
