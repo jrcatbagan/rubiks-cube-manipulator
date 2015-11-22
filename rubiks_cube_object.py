@@ -1049,8 +1049,9 @@ class rubiks_cube_object:
                         break
                     else:
                         self.rotate_cube(UP, CW)
+                self.algorithm("R U R' U R U U R'")
 
-        INCOMPLETE = 9
+        INCOMPLETE = 0
         COMPLETE = 1
 
         __corner_init_state = INCOMPLETE
@@ -1080,18 +1081,21 @@ class rubiks_cube_object:
                                 self.__rubiks_cube[1][1][2].keys()[0]:
                             self.twist_face(UP, CCW)
                             self.rotate_cube(UP, CCW)
+                        elif __color1 == __color2 == \
+                                self.__rubiks_cube[2][1][1].keys()[0]:
+                            self.twist_face(UP, CW)
+                            self.twist_face(UP, CW)
 
                         __corner_init_state = COMPLETE
-
-                self.rotate_cube(UP, CW)
+                    else:
+                        self.rotate_cube(UP, CW)
 
             if __corner_init_state == INCOMPLETE:
                 self.algorithm("R' F R' B B R F' R' B B R R U'")
             else:
                 self.algorithm("R' F R' B B R F' R' B B R R U'")
                 break
-
-        self.display_visual()
+            self.dipslay_visual()
 
         for __color, __face in self.__rubiks_cube[0][0][1].iteritems():
             if __face == FRONT:
