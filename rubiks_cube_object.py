@@ -543,31 +543,37 @@ class rubiks_cube_object:
             self.twist_face(FRONT, CW)
             self.twist_middle_layer(MIDDLE_FB, CW)
             self.twist_face(BACK, CCW)
+            print "X"
         elif (face == FRONT and direction == CCW) or \
                 (face == BACK and direction == CW):
             self.twist_face(FRONT, CCW)
             self.twist_middle_layer(MIDDLE_FB, CCW)
             self.twist_face(BACK, CW)
+            print "X'"
         elif (face == RIGHT and direction == CW) or \
                 (face == LEFT and direction == CCW):
             self.twist_face(RIGHT, CW)
             self.twist_middle_layer(MIDDLE_RL, CW)
             self.twist_face(LEFT, CCW)
+            print "Y"
         elif (face == RIGHT and direction == CCW) or \
                 (face == LEFT and direction == CW):
             self.twist_face(RIGHT, CCW)
             self.twist_middle_layer(MIDDLE_RL, CCW)
             self.twist_face(LEFT, CW)
+            print "Y'"
         elif (face == UP and direction == CW) or \
                 (face == DOWN and direction == CCW):
             self.twist_face(UP, CW)
             self.twist_middle_layer(MIDDLE_UD, CW)
             self.twist_face(DOWN, CCW)
+            print "Z"
         elif (face == UP and direction == CCW) or \
                 (face == DOWN and direction == CW):
             self.twist_face(UP, CCW)
             self.twist_middle_layer(MIDDLE_UD, CCW)
             self.twist_face(DOWN, CW)
+            print "Z'"
 
     def algorithm(self, sequence):
         __operation = ""
@@ -844,14 +850,14 @@ class rubiks_cube_object:
                     self.algorithm("B' B' D' D' F' F'")
             elif __cubie_position == EDGE_POS10:
                 if __edge_cubie[WHITE] == LEFT:
-                    self.algorithm("B D' D' F' F'")
+                    self.algorithm("B D' D' B' F' F'")
                 elif __edge_cubie[WHITE] == BACK:
-                    self.algorithm("B D' R F' R'")
+                    self.algorithm("B D' B' R F' R'")
             elif __cubie_position == EDGE_POS11:
                 if __edge_cubie[WHITE] == RIGHT:
-                    self.algorithm("B' D' D' F' F'")
+                    self.algorithm("B' D' D' B F' F'")
                 elif __edge_cubie[WHITE] == BACK:
-                    self.algorithm("B' D R F' R'")
+                    self.algorithm("B' D' B R F' R'")
             elif __cubie_position == EDGE_POS12:
                 if __edge_cubie[WHITE] == BACK:
                     self.algorithm("D R F' R'")
@@ -1075,16 +1081,15 @@ class rubiks_cube_object:
                             self.rotate_cube(UP, CCW)
                         elif __color1 == __color2 == \
                                 self.__rubiks_cube[1][1][0].keys()[0]:
-                            self.twist_face(UP, CW)
+                            self.algorithm("U")
                             self.rotate_cube(UP, CW)
                         elif __color1 == __color2 == \
                                 self.__rubiks_cube[1][1][2].keys()[0]:
-                            self.twist_face(UP, CCW)
+                            self.algorithm("U'")
                             self.rotate_cube(UP, CCW)
                         elif __color1 == __color2 == \
                                 self.__rubiks_cube[2][1][1].keys()[0]:
-                            self.twist_face(UP, CW)
-                            self.twist_face(UP, CW)
+                            self.algorithm("U U")
 
                         __corner_init_state = COMPLETE
                     else:
@@ -1093,9 +1098,72 @@ class rubiks_cube_object:
             if __corner_init_state == INCOMPLETE:
                 self.algorithm("R' F R' B B R F' R' B B R R U'")
             else:
-                self.algorithm("R' F R' B B R F' R' B B R R U'")
+                STATE0A = -1
+                STATE1A = 0
+                STATE2A = 1
+                STATE3A = 2
+                STATE4A = 3
+                STATE5A = 4
+                STATE6A = 5
+
+                STATE0B = -1
+                STATE1B = 6
+                STATE2B = 7
+
+                __rotation_state1 = STATE0A
+                __rotation_state2 = STATE0B
+
+
+                if RED in self.__rubiks_cube[0][1][1].keys():
+                    pass
+                elif RED in self.__rubiks_cube[1][1][0].keys():
+                    __rotation_state1 = STATE1A
+                    self.rotate_cube(UP, CCW)
+                elif RED in self.__rubiks_cube[1][1][2].keys():
+                    __rotation_state1 = STATE2A
+                    self.rotate_cube(UP, CW)
+                elif RED in self.__rubiks_cube[2][1][1].keys():
+                    __rotation_state1 = STATE3A
+                    self.rotate_cube(UP, CW)
+                    self.rotate_cube(UP, CW)
+                elif RED in self.__rubiks_cube[1][0][1].keys():
+                    __rotation_state1 = STATE4A
+                    self.rotate_cube(RIGHT, CCW)
+                else: # RED in self.__rubiks_cube[1][2][1].keys():
+                    __rotation_state1 = STATE5A
+                    self.rotate_cube(RIGHT, CW)
+
+                if WHITE in self.__rubiks_cube[1][0][1].keys():
+                    pass
+                elif WHITE in self.__rubiks_cube[1][2][1].keys():
+                    # TODO: Fix this,
+                    __rotation_state2 = STATE1B
+                    self.rotate_cube(FRONT, CW)
+                    self.rotate_cube(FRONT, CW)
+                else:
+                    pass
+
+                if self.__rubiks_cube != _rubiks_cube_default_state:
+                    if __rotation_state2 == STATE1B:
+                        self.rotate_cube(FRONT, CCW)
+                        self.rotate_cube(FRONT, CCW)
+
+                    if __rotation_state1 == STATE1A:
+                        self.rotate_cube(UP, CW)
+                    elif __rotation_state1 == STATE2A:
+                        self.rotate_cube(UP, CCW)
+                    elif __rotation_state1 == STATE3A:
+                        self.rotate_cube(UP, CCW)
+                        self.rotate_cube(UP, CCW)
+                    elif __rotation_state1 == STATE4A:
+                        self.rotate_cube(RIGHT, CW)
+                    elif __rotation_state1 == STATE5A:
+                        self.rotate_cube(RIGHT, CCW)
+
+                    self.algorithm("R' F R' B B R F' R' B B R R U'")
                 break
-            self.dipslay_visual()
+
+        __edge_init_state = INCOMPLETE
 
         for __color, __face in self.__rubiks_cube[0][0][1].iteritems():
             if __face == FRONT:
@@ -1116,6 +1184,19 @@ class rubiks_cube_object:
                 __edge3_color != self.__rubiks_cube[1][1][2].keys()[0] and \
                 __edge4_color != self.__rubiks_cube[2][1][1].keys()[0]:
             self.algorithm("F F U L R' F F L' R U F F")
+
+            for __color, __face in self.__rubiks_cube[0][0][1].iteritems():
+                if __face == FRONT:
+                    __edge1_color = __color
+            for __color, __face in self.__rubiks_cube[1][0][0].iteritems():
+                if __face == LEFT:
+                    __edge2_color = __color
+            for __color, __face in self.__rubiks_cube[1][0][2].iteritems():
+                if __face == RIGHT:
+                    __edge3_color = __color
+            for __color, __face in self.__rubiks_cube[2][0][1].iteritems():
+                if __face == BACK:
+                    __edge4_color = __color
 
             # Position the right edge to the back face
             if __edge1_color == self.__rubiks_cube[0][1][1].keys()[0]:
