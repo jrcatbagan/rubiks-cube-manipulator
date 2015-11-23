@@ -109,7 +109,7 @@ class rubiks_cube_object:
 
     def display_visual(self):
         for __layer in range(2, -1, -1):
-            print "     ",
+            print "       ",
             for __cubie in self.__rubiks_cube[__layer][0]:
                 for __color, __face in __cubie.iteritems():
                     if __face == UP:
@@ -117,6 +117,7 @@ class rubiks_cube_object:
             print ""
 
         for __row in range(0, 3):
+            print " ",
             for __layer in range(2, -1, -1):
                 __cubie = self.__rubiks_cube[__layer][__row][0]
                 for __color, __face in __cubie.iteritems():
@@ -140,7 +141,7 @@ class rubiks_cube_object:
             print ""
 
         for __layer in range(0, 3):
-            print "     ",
+            print "       ",
             for __cubie in self.__rubiks_cube[__layer][2]:
                 for __color, __face in __cubie.iteritems():
                     if __face == DOWN:
@@ -852,7 +853,7 @@ class rubiks_cube_object:
                 if __edge_cubie[WHITE] == LEFT:
                     self.algorithm("B D' D' B' F' F'")
                 elif __edge_cubie[WHITE] == BACK:
-                    self.algorithm("B D' B' R F' R'")
+                    self.algorithm("B' D' B R F' R'")
             elif __cubie_position == EDGE_POS11:
                 if __edge_cubie[WHITE] == RIGHT:
                     self.algorithm("B' D' D' B F' F'")
@@ -860,7 +861,7 @@ class rubiks_cube_object:
                     self.algorithm("B' D' B R F' R'")
             elif __cubie_position == EDGE_POS12:
                 if __edge_cubie[WHITE] == BACK:
-                    self.algorithm("D R F' R'")
+                    self.algorithm("D' R F' R'")
                 elif __edge_cubie[WHITE] == DOWN:
                     self.algorithm("D' D' F' F'")
 
