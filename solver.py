@@ -6,9 +6,10 @@
 import cv2
 import numpy as np
 import copy
+import time
 import rubiks_cube_object
 
-video_capture = cv2.VideoCapture(0)
+video_capture = cv2.VideoCapture(1)
 
 def nameColor(index):
     if index == 0:
@@ -95,6 +96,16 @@ while True:
     res = cv2.bitwise_and(image, mask)
     blur = cv2.blur(res, (1, 1))
 
+#    cv2.imshow("Image", image)
+#    cv2.imshow("Mask", mask)
+#    cv2.imshow("Res", res)
+#    cv2.imshow("Blur", blur)
+#    orange_thresh = cv2.inRange(blur, np.array(lowers[3]), np.array(uppers[3]))
+#    cv2.imshow("Orange Thresh", orange_thresh)
+#    kernel = np.ones((5, 5,))
+#    closing = cv2.morphologyEx(orange_thresh, cv2.MORPH_CLOSE, kernel)
+#    cv2.imshow("Closing", closing)
+
     # Goes through all the colors that we are looking for
     for i in range(0, 6):
         upper = np.array(uppers[i],dtype="uint8")
@@ -161,6 +172,7 @@ while True:
         if len(Colors) == 9:
             Cube.append(Colors)
             if FS < 5:
+                print Cube[FS]
                 FS = FS + 1
             else:
                 for c in Cube:
@@ -248,10 +260,14 @@ rubiks_cube_initial_state = \
 
 rubiks_cube = rubiks_cube_object.rubiks_cube_object(rubiks_cube_initial_state)
 rubiks_cube.display_visual()
+start_time = time.time()
 rubiks_cube.solve_top_edges()
 rubiks_cube.solve_top_corners()
 rubiks_cube.solve_middle_layer()
 rubiks_cube.solve_top_layer()
+elapsed_time = time.time() - start_time
 rubiks_cube.display_visual()
 print "Total moves: ",
 print rubiks_cube.get_total_moves()
+print "Total time: ",
+print elapsed_time
