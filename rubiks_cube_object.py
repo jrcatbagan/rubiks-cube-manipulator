@@ -1074,27 +1074,65 @@ class rubiks_cube_object:
                             self.__rubiks_cube[0][0][2].iteritems():
                         if __face == FRONT:
                             __color2 = __color
+                    for __color, __face in \
+                            self.__rubiks_cube[0][0][1].iteritems():
+                        if __face == FRONT:
+                            __color3 = __color
 
-                    if __color1 == __color2:
-                        if __color1 == __color2 == \
+                    if __color1 == __color2 == __color3:
+                        if __color1 == __color2 == __color3 == \
                                 self.__rubiks_cube[0][1][1].keys()[0]:
                             self.rotate_cube(UP, CCW)
                             self.rotate_cube(UP, CCW)
-                        elif __color1 == __color2 == \
+                        elif __color1 == __color2  == __color3== \
                                 self.__rubiks_cube[1][1][0].keys()[0]:
                             self.algorithm("U")
                             self.rotate_cube(UP, CW)
-                        elif __color1 == __color2 == \
+                        elif __color1 == __color2  == __color3== \
                                 self.__rubiks_cube[1][1][2].keys()[0]:
                             self.algorithm("U'")
                             self.rotate_cube(UP, CCW)
-                        elif __color1 == __color2 == \
+                        elif __color1 == __color2  == __color3== \
                                 self.__rubiks_cube[2][1][1].keys()[0]:
                             self.algorithm("U U")
 
                         __corner_init_state = COMPLETE
                     else:
                         self.rotate_cube(UP, CW)
+
+
+            if __corner_init_state == INCOMPLETE:
+                for __index in range(0, 4):
+                    if __corner_init_state == INCOMPLETE:
+                        for __color, __face in \
+                                self.__rubiks_cube[0][0][0].iteritems():
+                            if __face == FRONT:
+                                __color1 = __color
+                        for __color, __face in \
+                                self.__rubiks_cube[0][0][2].iteritems():
+                            if __face == FRONT:
+                                __color2 = __color
+
+                        if __color1 == __color2:
+                            if __color1 == __color2 == \
+                                    self.__rubiks_cube[0][1][1].keys()[0]:
+                                self.rotate_cube(UP, CCW)
+                                self.rotate_cube(UP, CCW)
+                            elif __color1 == __color2 == \
+                                    self.__rubiks_cube[1][1][0].keys()[0]:
+                                self.algorithm("U")
+                                self.rotate_cube(UP, CW)
+                            elif __color1 == __color2 == \
+                                    self.__rubiks_cube[1][1][2].keys()[0]:
+                                self.algorithm("U'")
+                                self.rotate_cube(UP, CCW)
+                            elif __color1 == __color2 == \
+                                    self.__rubiks_cube[2][1][1].keys()[0]:
+                                self.algorithm("U U")
+
+                            __corner_init_state = COMPLETE
+                        else:
+                            self.rotate_cube(UP, CW)
 
             if __corner_init_state == INCOMPLETE:
                 self.algorithm("R' F R' B B R F' R' B B R R U'")
@@ -1161,7 +1199,26 @@ class rubiks_cube_object:
                     elif __rotation_state1 == STATE5A:
                         self.rotate_cube(RIGHT, CCW)
 
-                    self.algorithm("R' F R' B B R F' R' B B R R U'")
+
+                    # Check first if all corners are complete
+                    __all_corners_complete = COMPLETE
+                    for __index in range(0, 4):
+                        for __color, __face in \
+                                self.__rubiks_cube[0][0][0].iteritems():
+                            if __face == FRONT:
+                                __color1 = __color
+                        for __color, __face in \
+                                self.__rubiks_cube[0][0][2].iteritems():
+                            if __face == FRONT:
+                                __color2 = __color
+
+                        if __color1 != __color2:
+                            __all_corners_complete = INCOMPLETE
+
+                        self.rotate_cube(UP, CW)
+
+                    if __all_corners_complete == INCOMPLETE:
+                        self.algorithm("R' F R' B B R F' R' B B R R U'")
                 break
 
         __edge_init_state = INCOMPLETE
