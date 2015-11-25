@@ -88,7 +88,7 @@ _rubiks_cube_default_state = \
 
 ]
 
-# ANSI code
+# ANSI color code for Rubik's Cube facets
 color_code = \
 [
     '\033[91m' + u'\u25fc' + '\033[0m',
