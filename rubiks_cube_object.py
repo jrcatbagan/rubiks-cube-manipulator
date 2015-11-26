@@ -50,6 +50,7 @@ class rubiks_cube_object:
     # Constructor
     def __init__(self, rubiks_cube_initial_state = rubiks_cube_default_state):
         self.__rubiks_cube = rubiks_cube_default_state
+        self.__total_moves = 0
 
 #------------------------------------------------------------------------------
 
@@ -81,6 +82,17 @@ class rubiks_cube_object:
             print ""
 
         print ""
+
+
+#------------------------------------------------------------------------------
+
+    def get_total_moves(self):
+        return self.__total_moves
+
+#------------------------------------------------------------------------------
+
+    def __increment_total_moves(self, value):
+        self.__total_moves += value
 
 #------------------------------------------------------------------------------
 
@@ -289,12 +301,20 @@ class rubiks_cube_object:
 #------------------------------------------------------------------------------
 
     def maneuver(self, move_sequence):
+        MOVE_UNDEFINED = 0
+        MOVE_INVALID = 1
+        MOVE_VALID = 2
+
+        __move_validity = MOVE_UNDEFINED
+
         __move_operation = ""
         for i in range(0, len(move_sequence)):
             if move_sequence[i] != ' ':
                 __move_operation += move_sequence[i]
 
             if move_sequence[i] == ' ' or i == len(move_sequence) - 1:
+                __move_validity = MOVE_VALID
+
                 if __move_operation == "U":
                     self.__twist_up_cw()
                 elif __move_operation == "U'":
@@ -321,6 +341,12 @@ class rubiks_cube_object:
                     self.__twist_left_ccw()
                 else:
                     print "error: invalid move operation"
+                    __move_validity = MOVE_INVALID
+
+                if __move_validity == MOVE_VALID:
+                    self.__increment_total_moves(1)
+                else:
+                    pass
 
                 __move_operation == ""
 
