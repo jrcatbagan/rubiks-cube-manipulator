@@ -300,6 +300,102 @@ class rubiks_cube_object:
 
 #------------------------------------------------------------------------------
 
+    def __twist_mud_cw(self):
+        __temp_row = copy.deepcopy(self.__rubiks_cube[FRONT][1,:])
+        self.__rubiks_cube[FRONT][1,:] = self.__rubiks_cube[RIGHT][1,:]
+        self.__rubiks_cube[RIGHT][1,:] = self.__rubiks_cube[BACK][1,:]
+        self.__rubiks_cube[BACK][1,:] = self.__rubiks_cube[LEFT][1,:]
+        self.__rubiks_cube[LEFT][1,:] = __temp_row
+
+#------------------------------------------------------------------------------
+
+    def __twist_mud_ccw(self):
+        __temp_row = copy.deepcopy(self.__rubiks_cube[FRONT][1,:])
+        self.__rubiks_cube[FRONT][1,:] = self.__rubiks_cube[LEFT][1,:]
+        self.__rubiks_cube[LEFT][1,:] = self.__rubiks_cube[BACK][1,:]
+        self.__rubiks_cube[BACK][1,:] = self.__rubiks_cube[RIGHT][1,:]
+        self.__rubiks_cube[RIGHT][1,:] = __temp_row
+
+#------------------------------------------------------------------------------
+
+    def __twist_mfb_cw(self):
+        __temp_row = copy.deepcopy(self.__rubiks_cube[UP][1,:])
+        self.__rubiks_cube[UP][1,:] = self.__rubiks_cube[LEFT][:,1][::-1]
+        self.__rubiks_cube[LEFT][:,1] = self.__rubiks_cube[DOWN][1,:]
+        self.__rubiks_cube[DOWN][1,:] = self.__rubiks_cube[RIGHT][:,1][::-1]
+        self.__rubiks_cube[RIGHT][:,1] = __temp_row
+
+#------------------------------------------------------------------------------
+
+    def __twist_mfb_ccw(self):
+        __temp_row = copy.deepcopy(self.__rubiks_cube[UP][1,:][::-1])
+        self.__rubiks_cube[UP][1,:] = self.__rubiks_cube[RIGHT][:,1]
+        self.__rubiks_cube[RIGHT][:,1] = self.__rubiks_cube[DOWN][1,:][::-1]
+        self.__rubiks_cube[DOWN][1,:] = self.__rubiks_cube[LEFT][:,1]
+        self.__rubiks_cube[LEFT][:,1] = __temp_row
+
+#------------------------------------------------------------------------------
+
+    def __twist_mrl_cw(self):
+        __temp_row = copy.deepcopy(self.__rubiks_cube[UP][:,1][::-1])
+        self.__rubiks_cube[UP][:,1] = self.__rubiks_cube[FRONT][:,1]
+        self.__rubiks_cube[FRONT][:,1] = self.__rubiks_cube[DOWN][:,1]
+        self.__rubiks_cube[DOWN][:,1] = self.__rubiks_cube[BACK][:,1][::-1]
+        self.__rubiks_cube[BACK][:,1] = __temp_row
+
+#------------------------------------------------------------------------------
+
+    def __twist_mrl_ccw(self):
+        __temp_row = copy.deepcopy(self.__rubiks_cube[UP][:,1])
+        self.__rubiks_cube[UP][:,1] = self.__rubiks_cube[BACK][:,1][::-1]
+        self.__rubiks_cube[BACK][:,1] = self.__rubiks_cube[DOWN][:,1][::-1]
+        self.__rubiks_cube[DOWN][:,1] = self.__rubiks_cube[FRONT][:,1]
+        self.__rubiks_cube[FRONT][:,1] = __temp_row
+
+#------------------------------------------------------------------------------
+
+    def __rotate_x_cw(self):
+        self.__twist_front_cw()
+        self.__twist_mfb_cw()
+        self.__twist_back_ccw()
+
+#------------------------------------------------------------------------------
+
+    def __rotate_x_ccw(self):
+        self.__twist_front_ccw()
+        self.__twist_mfb_ccw()
+        self.__twist_back_cw()
+
+#------------------------------------------------------------------------------
+
+    def __rotate_y_cw(self):
+        self.__twist_right_cw()
+        self.__twist_mrl_cw()
+        self.__twist_left_ccw()
+
+#------------------------------------------------------------------------------
+
+    def __rotate_y_ccw(self):
+        self.__twist_right_ccw()
+        self.__twist_mrl_ccw()
+        self.__twist_left_cw()
+
+#------------------------------------------------------------------------------
+
+    def __rotate_z_cw(self):
+        self.__twist_up_cw()
+        self.__twist_mud_cw()
+        self.__twist_down_ccw()
+
+#------------------------------------------------------------------------------
+
+    def __rotate_z_ccw(self):
+        self.__twist_up_ccw()
+        self.__twist_mud_ccw()
+        self.__twist_down_cw()
+
+#------------------------------------------------------------------------------
+
     def maneuver(self, move_sequence):
         MOVE_UNDEFINED = 0
         MOVE_INVALID = 1
@@ -339,6 +435,30 @@ class rubiks_cube_object:
                     self.__twist_left_cw()
                 elif __move_operation == "L'":
                     self.__twist_left_ccw()
+                elif __move_operation == "E":
+                    self.__twist_mud_cw()
+                elif __move_operation == "E'":
+                    self.__twist_mud_ccw()
+                elif __move_operation == "S":
+                    self.__twist_mfb_cw()
+                elif __move_operation == "S'":
+                    self.__twist_mfb_ccw()
+                elif __move_operation == "M":
+                    self.__twist_mrl_cw()
+                elif __move_operation == "M'":
+                    self.__twist_mrl_ccw()
+                elif __move_operation == "X":
+                    self.__rotate_x_cw()
+                elif __move_operation == "X'":
+                    self.__rotate_x_ccw()
+                elif __move_operation == "Y":
+                    self.__rotate_y_cw()
+                elif __move_operation == "Y'":
+                    self.__rotate_y_ccw()
+                elif __move_operation == "Z":
+                    self.__rotate_z_cw()
+                elif __move_operation == "Z'":
+                    self.__rotate_z_ccw()
                 else:
                     print "error: invalid move operation"
                     __move_validity = MOVE_INVALID
